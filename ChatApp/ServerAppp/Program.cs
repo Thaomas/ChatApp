@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerApp;
+using System;
 
 namespace ServerAppp
 {
@@ -6,7 +7,9 @@ namespace ServerAppp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Server server = new Server(51510);
+            server.Start();
+            Console.ReadLine();
         }
     }
 }
