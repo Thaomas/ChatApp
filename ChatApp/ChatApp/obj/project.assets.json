@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "V:\\ChatApp\\ChatApp\\ChatApp\\ChatApp.csproj",
-      "projectName": "ChatApp",
-      "projectPath": "V:\\ChatApp\\ChatApp\\ChatApp\\ChatApp.csproj",
+      "projectUniqueName": "V:\\ChatApp\\ChatApp\\ChatApp\\ClientApp.csproj",
+      "projectName": "ClientApp",
+      "projectPath": "V:\\ChatApp\\ChatApp\\ChatApp\\ClientApp.csproj",
       "packagesPath": "C:\\Users\\Gigabyte Z270X Ultra\\.nuget\\packages\\",
       "outputPath": "V:\\ChatApp\\ChatApp\\ChatApp\\obj\\",
       "projectStyle": "PackageReference",
