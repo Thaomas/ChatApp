@@ -19,9 +19,14 @@ namespace ClientApp
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            this.Invoke((Action)delegate {
-                BannerLabel.Text = TextBoxUsername.Text + " " + TextBoxPassword.Text;
-            });
+            //TextBoxUsername.Text  TextBoxPassword.Text
         }
+
+        private void RegisterButton_Click(object sender, EventArgs e)
+        {
+            //TextBoxUsername.Text TextBoxPassword.Text
+
+        }
+
     }
 }
