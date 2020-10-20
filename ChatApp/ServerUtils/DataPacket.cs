@@ -31,6 +31,17 @@ namespace ServerUtils
         }
     }
 
+    class RegisterPacket : DAbstract 
+    {
+        public string username;
+        public string password;
+    }
+
+    class RegisterResponsePacket : DAbstract
+    {
+        public string status;
+    }
+
     class LoginPacket : DAbstract
     {
         public bool isClient;

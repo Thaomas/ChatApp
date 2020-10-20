@@ -15,13 +15,47 @@ namespace ClientApp
     public partial class LoginForm : Form
     {
 
-        private TcpClient _client;
+        private Client _client;
 
         public LoginForm()
         {
             InitializeComponent();
-            _client = new TcpClient();
+            this._client = new Client();
+            this._client.OnLogin += Client_OnLogin;
+            this._client.OnRegister += Client_OnRegister;
         }
+        private void Client_OnLogin(bool status)
+        {
+            this.Invoke((Action)delegate {
+                if (status)
+                {
+                    HomeForm homePageForm = new HomeForm();
+                    homePageForm.Show();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Invalid Password or Username", "Error");
+                }
+            });
+
+        }
+
+        private void Client_OnRegister(bool status)
+        {
+            this.Invoke((Action)delegate {
+                if (status)
+                {
+                    MessageBox.Show("Registration succesfull");
+                }
+                else
+                {
+                    MessageBox.Show("Username already in use", "Error");
+                }
+            });
+
+        }
+
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
