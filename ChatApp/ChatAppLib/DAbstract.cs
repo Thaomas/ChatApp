@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
 namespace ChatAppLib
 {
-    class Program
+    public abstract class DAbstract
     {
-        static void Main(string[] args)
+        public string ToJson()
         {
-            Console.WriteLine("Hello World!");
+            return JsonConvert.SerializeObject(this);
         }
     }
 }
