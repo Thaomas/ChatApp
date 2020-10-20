@@ -23,11 +23,10 @@ namespace ServerUtils
 
         public DataPacket<T> GetData<T>() where T : DAbstract
         {
-            return new DataPacket<T>
-            {
+            return new DataPacket<T> {
                 sender = this.sender,
-                type = this.type,
-                data = this.data.ToObject<T>()
+                type = this.type, 
+                data = this.data.ToObject<T>() 
             };
         }
     }
