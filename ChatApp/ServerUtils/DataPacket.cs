@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using ChatAppLib;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using RHApplicationLib.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -66,12 +66,6 @@ namespace ServerUtils
         public string doctorUserName;
     }
 
-    class ResistancePacket : DAbstract
-    {
-        public string receiver;
-        public int resistance;
-    }
-
     class RequestClientDataPacket : DAbstract
     {
 
@@ -83,29 +77,5 @@ namespace ServerUtils
         public bool startSession;
     }
 
-    class RequestSessionStatePacket : DAbstract
-    {
-        public string receiver;
-    }
 
-    class ResponseSessionStatePacket : DAbstract
-    {
-        public string receiver;
-        public string sessionId;
-        public bool sessionState;
-        public DateTime startTimeSession;
-    }
-
-    //Eventueel nog responsePackets
-
-    public class BikeDataPacket : DAbstract
-    {
-        public string receiver;
-        public double speed;
-        public int heartbeat;
-        public double elapsedTime;
-        public int distanceTraveled;
-        public int power;
-        public DateTime timestamp;
-    }
 }
