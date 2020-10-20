@@ -10,35 +10,28 @@ namespace ServerApp
 {
     class Server
     {
-        private int portNumber;
+        private int _portNumber;
         public Server(int port)
         {
-            portNumber = port;
+            _portNumber = port;
         }
 
         // Start listening for connection:
         public async void Start()
         {
             IPAddress ipAddres = IPAddress.Loopback;
-            TcpListener listener = new TcpListener(ipAddres, portNumber);
+            TcpListener listener = new TcpListener(ipAddres, _portNumber);
             listener.Start();
+            listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
             LogMessage("Server is running");
-            LogMessage($"Listening on {IPAddress.Loopback.ToString()}:{portNumber}");
-
-            while (true)
-            {
-                LogMessage("Waiting for connections...");
-                try
-                {
-                    var tcpClient = await listener.AcceptTcpClientAsync().ConfigureAwait(false);
-                    await HandleClientAsync(tcpClient);
-                }
-                catch (Exception exp)
-                {
-                    LogMessage(exp.ToString());
-                }
-            }
+            LogMessage($"Listening on {IPAddress.Loopback.ToString()}:{_portNumber}");
         }
+
+        private void OnConnect(IAsyncResult result)
+        {
+            var client = this.li
+        }
+
         /// Process Individual client
 
         private async Task HandleClientAsync(TcpClient tcpClient)
