@@ -31,16 +31,25 @@ namespace ServerUtils
         }
     }
 
+    class RegisterPacket : DAbstract
+    {
+        public string username;
+        public string password;
+    }
+
+    class RegisterResponsePacket : DAbstract
+    {
+        public string status;
+    }
+
     class LoginPacket : DAbstract
     {
-        public bool isClient;
         public string username;
         public string password;
     }
 
     class LoginResponse : DAbstract
     {
-        public bool isClient;
         public string status;
     }
 
@@ -49,32 +58,5 @@ namespace ServerUtils
         public string receiver;
         public string chatMessage;
     }
-
-    class ClientListPacket : DAbstract
-    {
-        public Dictionary<string, bool> clientList;
-    }
-
-    class UserNamePacket : DAbstract
-    {
-        public string clientUserName;
-    }
-
-    class UserNamePacketResponse : DAbstract
-    {
-        public string doctorUserName;
-    }
-
-    class RequestClientDataPacket : DAbstract
-    {
-
-    }
-
-    public class StartStopPacket : DAbstract
-    {
-        public string receiver;
-        public bool startSession;
-    }
-
 
 }
