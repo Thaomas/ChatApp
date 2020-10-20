@@ -13,7 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAppLib", "ChatAppLib\Ch
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		ServerUtils\ServerUtils.projitems*{0ba86f6d-277e-4bd6-9b0a-df0a5da77176}*SharedItemsImports = 5
 		ServerUtils\ServerUtils.projitems*{f9b94eb6-62b1-4d6e-89b9-8e3ed6773299}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
