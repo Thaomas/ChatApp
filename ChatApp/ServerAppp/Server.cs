@@ -23,7 +23,7 @@ namespace ServerApp
             TcpListener listener = new TcpListener(ipAddres, portNumber);
             listener.Start();
             LogMessage("Server is running");
-            LogMessage("Listening on port " + portNumber);
+            LogMessage($"Listening on {IPAddress.Loopback.ToString()}:{portNumber}");
 
             while (true)
             {
