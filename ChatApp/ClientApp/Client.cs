@@ -2,6 +2,7 @@
 using ServerUtils;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -21,6 +22,8 @@ namespace ClientApp
         private bool registered = false;
         private string clientUserName;
 
+        public IPEndPoint RemoteEndPoint { get; internal set; }
+
         public event LoginCallback OnLogin;
         public event RegisterCallback OnRegister;
         public event ChatCallback OnChatReceived;
@@ -28,10 +31,12 @@ namespace ClientApp
         public Client()
         {
             this.client = new TcpClient();
-            this.client.BeginConnect("localhost", 15243, new AsyncCallback(Connect), null);
         }
 
-
+        public async void ConnectAsync(IPAddress iP, int port)
+        {
+            client.BeginConnect(iP, port, new AsyncCallback(Connect), null);
+        }
 
         public void Connect(IAsyncResult ar)
         {
@@ -142,7 +147,7 @@ namespace ClientApp
                 case "LOGINRESPONSE":
                     {
                         DataPacket<LoginResponse> d = data.GetData<LoginResponse>();
-                        if (d.data.status == "OK" && !d.data.isClient)
+                        if (d.data.status == "OK")
                         {
                             this.loggedIn = true;
                             OnLogin?.Invoke(this.loggedIn);

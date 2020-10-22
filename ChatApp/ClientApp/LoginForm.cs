@@ -59,9 +59,9 @@ namespace ClientApp
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            if( !(TextBoxIP.Text == null) || !(TextBoxPort.Text == null)  && !((IPEndPoint)_client.Client.RemoteEndPoint).Address.ToString().Equals(TextBoxIP.Text) || !((IPEndPoint)_client.Client.RemoteEndPoint).Port.Equals(TextBoxPort.Text))
+            if (!(TextBoxIP.Text == null) || !(TextBoxPort.Text == null) && !((IPEndPoint)_client.RemoteEndPoint).Address.ToString().Equals(TextBoxIP.Text) || !((IPEndPoint)_client.RemoteEndPoint).Port.Equals(TextBoxPort.Text))
             {
-                _client.ConnectAsync(IPAddress.Parse( TextBoxIP.Text), Convert.ToInt32(TextBoxPort.Text));
+                _client.ConnectAsync(IPAddress.Parse(TextBoxIP.Text), Convert.ToInt32(TextBoxPort.Text));
 
             }
             bool connected = true;
