@@ -25,7 +25,7 @@ namespace ServerApp
             this._stream = this._tcpClient.GetStream();
             this._username = "";
             this._stream.BeginRead(this._buffer, 0, this._buffer.Length,  new AsyncCallback(RecieveLength), null);
-
+            Console.WriteLine("Begin read client");
         }
 
         private void RecieveLength(IAsyncResult result)
@@ -48,6 +48,8 @@ namespace ServerApp
 
         private async Task parseDataAsync(DataPacket data)
         {
+
+            Console.WriteLine(data.type);
             switch (data.type)
             {
                 case "LOGIN":

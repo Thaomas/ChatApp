@@ -113,6 +113,7 @@
             this.TextBoxIP.Name = "TextBoxIP";
             this.TextBoxIP.Size = new System.Drawing.Size(100, 23);
             this.TextBoxIP.TabIndex = 3;
+            this.TextBoxIP.Text = "127.0.0.1";
             // 
             // label1
             // 
@@ -130,6 +131,7 @@
             this.TextBoxPort.Name = "TextBoxPort";
             this.TextBoxPort.Size = new System.Drawing.Size(100, 23);
             this.TextBoxPort.TabIndex = 3;
+            this.TextBoxPort.Text = "51510";
             // 
             // label3
             // 

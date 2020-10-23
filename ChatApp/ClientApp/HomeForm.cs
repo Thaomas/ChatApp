@@ -33,9 +33,19 @@ namespace ClientApp
         {
             if(e.KeyChar == (char)Keys.Enter)
             {
-
-                textBoxChatMessage.Text = "";
+                buttonSend_Click();
             }
+        }
+
+        private void buttonSend_Click()
+        {
+            this.client.SendChatMessage(textBoxChatMessage.Text);
+            textBoxChatMessage.Text = "";
+        }
+
+        private void buttonSend_Click(object sender, EventArgs e)
+        {
+            buttonSend_Click();
         }
     }
 }

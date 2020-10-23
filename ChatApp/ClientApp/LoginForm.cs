@@ -29,7 +29,7 @@ namespace ClientApp
             this.Invoke((Action)delegate {
                 if (status)
                 {
-                    HomeForm homePageForm = new HomeForm();
+                    HomeForm homePageForm = new HomeForm(_client);
                     homePageForm.Show();
                     this.Hide();
                 }
@@ -64,20 +64,18 @@ namespace ClientApp
                 _client.ConnectAsync(IPAddress.Parse(TextBoxIP.Text), Convert.ToInt32(TextBoxPort.Text));
 
             }
-            bool connected = true;
-            if (connected)
-            {
-                HomeForm home = new HomeForm();
-                home.Show();
-                this.Hide();
-            }
-
-            //TextBoxUsername.Text  TextBoxPassword.Text
+            _client.SendLogin(TextBoxUsername.Text, TextBoxPassword.Text);
         }
 
         private void RegisterButton_Click(object sender, EventArgs e)
         {
-            //TextBoxUsername.Text TextBoxPassword.Text
+            if (!(TextBoxIP.Text == null) || !(TextBoxPort.Text == null) && !((IPEndPoint)_client.RemoteEndPoint).Address.ToString().Equals(TextBoxIP.Text) || !((IPEndPoint)_client.RemoteEndPoint).Port.Equals(TextBoxPort.Text))
+            {
+                _client.ConnectAsync(IPAddress.Parse(TextBoxIP.Text), Convert.ToInt32(TextBoxPort.Text));
+
+            }
+
+            _client.SendRegister(TextBoxUsername.Text, TextBoxPassword.Text);
 
         }
 

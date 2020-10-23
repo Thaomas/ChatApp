@@ -201,7 +201,11 @@ namespace ServerApp
             foreach (KeyValuePair<Client, string> keyPair in connectedUsers)
             {
                 if (!keyPair.Value.Equals(""))
+                {
                     keyPair.Key.messageClient(message);
+                    Console.WriteLine(message + " to " + keyPair.Value);
+                }
+               
             }
         }
     }
