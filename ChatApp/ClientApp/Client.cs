@@ -11,7 +11,7 @@ namespace ClientApp
 
     public delegate void LoginCallback(bool status);
     public delegate void RegisterCallback(bool status);
-    public delegate void ChatCallback(string sender, string message);
+    public delegate void ChatCallback(string message);
     public class Client
     {
         private TcpClient _client;
@@ -181,7 +181,7 @@ namespace ClientApp
                     {
                         DataPacket<ChatPacket> d = data.GetData<ChatPacket>();
 
-                        OnChatReceived?.Invoke(d.sender, $"{d.data.chatMessage}\r\n");
+                        OnChatReceived?.Invoke($"{d.data.chatMessage}\r\n");
                         break;
                     }
                 default:

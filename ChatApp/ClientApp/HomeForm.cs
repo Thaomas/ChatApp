@@ -10,12 +10,16 @@ namespace ClientApp
 {
     public partial class HomeForm : Form
     {
-        public HomeForm()
+
+        private Client client;
+        public HomeForm(Client client)
         {
             InitializeComponent();
+            this.client = client;   
+            this.client.OnChatReceived += Client_OnChatReceived;
         }
 
-        public void addMessageToChat(string message)
+        public void Client_OnChatReceived(string message)
         {
             this.Invoke((Action)delegate
             {
