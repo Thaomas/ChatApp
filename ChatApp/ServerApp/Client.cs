@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Web;
+using System.Threading.Tasks;
 
 namespace ServerApp
 {
@@ -45,7 +46,7 @@ namespace ServerApp
             this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(RecieveLength), null);
         }
 
-        private async System.Threading.Tasks.Task parseDataAsync(DataPacket data)
+        private async Task parseDataAsync(DataPacket data)
         {
             switch (data.type)
             {

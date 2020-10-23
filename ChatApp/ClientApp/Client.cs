@@ -14,12 +14,12 @@ namespace ClientApp
     public delegate void ChatCallback(string sender, string message);
     public class Client
     {
-        private TcpClient client;
-        private NetworkStream stream;
-        private byte[] buffer = new byte[4];
+        private TcpClient _client;
+        private NetworkStream _stream;
+        private byte[] _buffer = new byte[4];
         public string username;
-        private bool loggedIn = false;
-        private bool registered = false;
+        private bool _loggedIn = false;
+        private bool _registered = false;
 
         public IPEndPoint RemoteEndPoint { get; internal set; }
 
@@ -29,23 +29,23 @@ namespace ClientApp
 
         public Client()
         {
-            this.client = new TcpClient();
+            this._client = new TcpClient();
         }
 
         public void ConnectAsync(IPAddress iP, int port)
         {
-            client.BeginConnect(iP, port, new AsyncCallback(Connect), null);
+            _client.BeginConnect(iP, port, new AsyncCallback(Connect), null);
         }
 
         public void Connect(IAsyncResult ar)
         {
-            this.client.EndConnect(ar);
+            this._client.EndConnect(ar);
 
-            if (!this.loggedIn)
+            if (!this._loggedIn)
             {
-                this.stream = client.GetStream();
+                this._stream = _client.GetStream();
             }
-            this.stream.BeginRead(this.buffer, 0, this.buffer.Length, new AsyncCallback(ReceiveLengthInt), null);
+            this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(ReceiveLengthInt), null);
         }
 
         public void SendLogin(string username, string password)
@@ -67,7 +67,7 @@ namespace ClientApp
             sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
 
             // send the message
-            this.stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
+            this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
         }
 
         public void SendRegister(string username, string password)
@@ -89,33 +89,33 @@ namespace ClientApp
             sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
 
             // send the message
-            this.stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
+            this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
         }
 
         private void ReceiveLengthInt(IAsyncResult ar)
         {
-            int dataLength = BitConverter.ToInt32(this.buffer);
+            int dataLength = BitConverter.ToInt32(this._buffer);
 
             // create data buffer
-            this.buffer = new byte[dataLength];
+            this._buffer = new byte[dataLength];
 
-            this.stream.BeginRead(this.buffer, 0, this.buffer.Length, new AsyncCallback(ReceiveData), null);
+            this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(ReceiveData), null);
         }
 
         private void ReceiveData(IAsyncResult ar)
         {
-            string data = System.Text.Encoding.ASCII.GetString(this.buffer);
+            string data = System.Text.Encoding.ASCII.GetString(this._buffer);
 
             DataPacket dataPacket = JsonConvert.DeserializeObject<DataPacket>(data);
             handleData(dataPacket);
 
-            this.buffer = new byte[4];
-            this.stream.BeginRead(this.buffer, 0, this.buffer.Length, new AsyncCallback(ReceiveLengthInt), null);
+            this._buffer = new byte[4];
+            this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(ReceiveLengthInt), null);
         }
 
         public void SendChatMessage(string message)
         {
-            if (this.loggedIn)
+            if (this._loggedIn)
             {
                 DataPacket<ChatPacket> dataPacket = new DataPacket<ChatPacket>()
                 {
@@ -133,7 +133,7 @@ namespace ClientApp
                 sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
 
                 // send the message
-                this.stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
+                this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
             }
         }
 
@@ -146,14 +146,14 @@ namespace ClientApp
                         DataPacket<LoginResponse> d = data.GetData<LoginResponse>();
                         if (d.data.status == "OK")
                         {
-                            this.loggedIn = true;
-                            OnLogin?.Invoke(this.loggedIn);
+                            this._loggedIn = true;
+                            OnLogin?.Invoke(this._loggedIn);
                             Console.WriteLine("You are logged in!");
                         }
                         else if (d.data.status == ("ERROR"))
                         {
-                            this.loggedIn = false;
-                            OnLogin?.Invoke(this.loggedIn);
+                            this._loggedIn = false;
+                            OnLogin?.Invoke(this._loggedIn);
                             Console.WriteLine("Your username and/or password is not valid!");
 
                         }
@@ -164,14 +164,14 @@ namespace ClientApp
                         DataPacket<RegisterResponsePacket> d = data.GetData<RegisterResponsePacket>();
                         if (d.data.status == "OK")
                         {
-                            this.registered = true;
-                            OnRegister?.Invoke(this.registered);
+                            this._registered = true;
+                            OnRegister?.Invoke(this._registered);
                             Console.WriteLine("You are Registered");
                         }
                         else if (d.data.status == ("ERROR"))
                         {
-                            this.registered = false;
-                            OnRegister?.Invoke(this.registered);
+                            this._registered = false;
+                            OnRegister?.Invoke(this._registered);
                             Console.WriteLine("Your username is already taken");
 
                         }
