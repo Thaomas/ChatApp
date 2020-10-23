@@ -20,7 +20,6 @@ namespace ClientApp
         public string username;
         private bool loggedIn = false;
         private bool registered = false;
-        private string clientUserName;
 
         public IPEndPoint RemoteEndPoint { get; internal set; }
 
@@ -33,7 +32,7 @@ namespace ClientApp
             this.client = new TcpClient();
         }
 
-        public async void ConnectAsync(IPAddress iP, int port)
+        public void ConnectAsync(IPAddress iP, int port)
         {
             client.BeginConnect(iP, port, new AsyncCallback(Connect), null);
         }
@@ -120,11 +119,9 @@ namespace ClientApp
             {
                 DataPacket<ChatPacket> dataPacket = new DataPacket<ChatPacket>()
                 {
-                    sender = this.username,
                     type = "CHAT",
                     data = new ChatPacket()
                     {
-                        receiver = clientUserName,
                         chatMessage = message
                     }
                 };
