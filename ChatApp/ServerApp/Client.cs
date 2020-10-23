@@ -133,7 +133,7 @@ namespace ServerApp
                 }
             }.ToJson());
         }
-       
+
         private void SendPacket(string packet)
         {
             List<byte> buffer = new List<byte>(Encoding.ASCII.GetBytes(packet));

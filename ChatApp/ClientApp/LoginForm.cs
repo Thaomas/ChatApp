@@ -56,7 +56,7 @@ namespace ClientApp
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            Login();   
+            Login();
         }
 
         private void Login()
@@ -84,10 +84,10 @@ namespace ClientApp
             _client.SendRegister(TextBoxUsername.Text, TextBoxPassword.Text);
 
         }
-        
+
         public void TextBoxUsername_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if(e.KeyChar == (char)Keys.Enter)
+            if (e.KeyChar == (char)Keys.Enter)
             {
                 TextBoxPassword.Focus();
                 e.Handled = true;

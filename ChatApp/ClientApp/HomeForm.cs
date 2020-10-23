@@ -20,7 +20,7 @@ namespace ClientApp
                 textBoxChatLog.Text += message + Environment.NewLine;
             }
         }
-        
+
         private void HomeForm_Shown(Object sender, EventArgs e)
         {
             textBoxChatLog.SelectionStart = textBoxChatLog.Text.Length;
