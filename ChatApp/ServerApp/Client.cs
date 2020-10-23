@@ -11,7 +11,6 @@ namespace ServerApp
     class Client
     {
         private TcpClient _tcpClient;
-        public TcpClient TcpClient { get { return this._tcpClient; } }
         private NetworkStream _stream;
         private byte[] _buffer = new byte[4];
         private string _username;
@@ -123,13 +122,6 @@ namespace ServerApp
             }
         }
 
-        private void SendPacket(string packet)
-        {
-            List<byte> buffer = new List<byte>(Encoding.ASCII.GetBytes(packet));
-            buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
-            this._stream.Write(buffer.ToArray(), 0, buffer.Count);
-        }
-
         public void messageClient(string message)
         {
             SendPacket(new DataPacket<ChatPacket>()
@@ -140,6 +132,13 @@ namespace ServerApp
                     chatMessage = message
                 }
             }.ToJson());
+        }
+       
+        private void SendPacket(string packet)
+        {
+            List<byte> buffer = new List<byte>(Encoding.ASCII.GetBytes(packet));
+            buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
+            this._stream.Write(buffer.ToArray(), 0, buffer.Count);
         }
     }
 }

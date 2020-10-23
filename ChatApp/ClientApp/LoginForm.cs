@@ -19,6 +19,7 @@ namespace ClientApp
             this._client.OnLogin += Client_OnLogin;
             this._client.OnRegister += Client_OnRegister;
         }
+
         private void Client_OnLogin(bool status, List<string> chatlog)
         {
             this.Invoke((Action)delegate
@@ -52,7 +53,6 @@ namespace ClientApp
             });
 
         }
-
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
@@ -94,6 +94,7 @@ namespace ClientApp
             }
 
         }
+
         public void TextBoxPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)

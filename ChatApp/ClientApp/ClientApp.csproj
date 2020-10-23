@@ -15,18 +15,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="HomeForm.cs" >
-			<SubType>Form</SubType>
-		</Compile>
+		<Compile Update="HomeForm.cs" />
 		<Compile Update="HomeForm.Designer.cs">
 			<DependentUpon>HomeForm.cs</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="LoginForm.cs" >
-			<SubType>Form</SubType>
-		</Compile>
+		<Compile Update="LoginForm.cs" />
 		<Compile Update="LoginForm.Designer.cs">
 			<DependentUpon>LoginForm.cs</DependentUpon>
 		</Compile>

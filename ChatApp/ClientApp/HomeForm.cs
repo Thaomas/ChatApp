@@ -37,6 +37,11 @@ namespace ClientApp
             });
         }
 
+        private void buttonSend_Click(object sender, EventArgs e)
+        {
+            buttonSend_Click();
+        }
+
         private void TextBoxChatMessage_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
@@ -51,11 +56,6 @@ namespace ClientApp
             this.client.SendChatMessage(textBoxChatMessage.Text);
             textBoxChatMessage.Clear();
             textBoxChatMessage.Focus();
-        }
-
-        private void buttonSend_Click(object sender, EventArgs e)
-        {
-            buttonSend_Click();
         }
     }
 }

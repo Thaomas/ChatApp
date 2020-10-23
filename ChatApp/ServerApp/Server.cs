@@ -22,13 +22,8 @@ namespace ServerApp
         {
             Console.WriteLine("Begin server");
             _portNumber = port;
-
-
-
             users = LoadUsers();
             _chatLog = LoadChatLog();
-
-
 
             connectedUsers = new Dictionary<Client, string>();
             tempConn = new List<Client>();
@@ -37,8 +32,8 @@ namespace ServerApp
             this._listener.Start();
             this._listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
 
-            LogMessage("Server is running");
-            LogMessage($"Listening on {ipAddres.ToString()}:{_portNumber}");
+            Console.WriteLine("Server is running");
+            Console.WriteLine($"Listening on {ipAddres.ToString()}:{_portNumber}");
 
             Timer timer = new Timer((e) =>
             {
@@ -48,29 +43,6 @@ namespace ServerApp
 
         }
 
-        private void SaveChatLog()
-        {
-            List<string> log = GetChatLog();
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\ChatLog.txt");
-            File.WriteAllLines(path, log);
-        }
-
-        private void SaveUsers()
-        {
-            Dictionary<string, string> listDict;
-            lock (users)
-            {
-                listDict = new Dictionary<string, string>(users);
-            }
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\Users.txt");
-            List<string> userList = new List<string>();
-            foreach (KeyValuePair<string, string> kvPair in listDict)
-            {
-                userList.Add($"{kvPair.Key}|{kvPair.Value}");
-            }
-            File.WriteAllLines(path, userList);
-        }
-
         private void OnConnect(IAsyncResult result)
         {
             var client = this._listener.EndAcceptTcpClient(result);
@@ -78,54 +50,6 @@ namespace ServerApp
             tempConn.Add(new Client(client, this));
 
             _listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
-        }
-
-        private void LogMessage(string message, [CallerMemberName] string callername = "")
-        {
-            Console.WriteLine("[{0}] - Thread-{1}- {2}",
-                    callername, Thread.CurrentThread.ManagedThreadId, message);
-        }
-
-
-        private List<string> LoadChatLog()
-        {
-            try
-            {
-                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\ChatLog.txt");
-                var log = File.ReadAllLines(path);
-                return new List<string>(log);
-            }
-            catch
-            {
-                Console.WriteLine("Error in loading ChatLog");
-                return new List<string>();
-            }
-        }
-
-        private Dictionary<string, string> LoadUsers()
-        {
-            Dictionary<string, string> users = new Dictionary<string, string>();
-            try
-            {
-                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\Users.txt");
-                var log = File.ReadAllLines(path);
-                foreach (string line in log)
-                {
-                    int index = line.IndexOf('|');
-                    users.Add(line.Substring(0, index), line.Substring(index + 1));
-                }
-            }
-            catch (Exception e)
-            {
-
-                Console.WriteLine("Error in loading Users");
-                Console.WriteLine(e.ToString());
-            }
-            return users;
-        }
-        public List<string> GetChatLog()
-        {
-            return _chatLog;
         }
 
         public string RegisterClient(Client client, string username, string password)
@@ -148,8 +72,6 @@ namespace ServerApp
                     return "ERROR";
             }
         }
-
-
 
         public string LoginClient(Client client, string username, string password)
         {
@@ -185,6 +107,72 @@ namespace ServerApp
 
         }
 
+        private void SaveChatLog()
+        {
+            List<string> log = GetChatLog();
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\ChatLog.txt");
+            File.WriteAllLines(path, log);
+        }
+
+        private List<string> LoadChatLog()
+        {
+            try
+            {
+                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\ChatLog.txt");
+                var log = File.ReadAllLines(path);
+                return new List<string>(log);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in loading ChatLog");
+                Console.WriteLine(e.Message);
+                return new List<string>();
+            }
+        }
+
+        private void SaveUsers()
+        {
+            Dictionary<string, string> listDict;
+            lock (users)
+            {
+                listDict = new Dictionary<string, string>(users);
+            }
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\Users.txt");
+            List<string> userList = new List<string>();
+            foreach (KeyValuePair<string, string> kvPair in listDict)
+            {
+                userList.Add($"{kvPair.Key}|{kvPair.Value}");
+            }
+            File.WriteAllLines(path, userList);
+        }
+
+        private Dictionary<string, string> LoadUsers()
+        {
+            Dictionary<string, string> users = new Dictionary<string, string>();
+            try
+            {
+                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\Users.txt");
+                var log = File.ReadAllLines(path);
+                foreach (string line in log)
+                {
+                    int index = line.IndexOf('|');
+                    users.Add(line.Substring(0, index), line.Substring(index + 1));
+                }
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine("Error in loading Users");
+                Console.WriteLine(e.Message);
+            }
+            return users;
+        }
+
+        public List<string> GetChatLog()
+        {
+            return _chatLog;
+        }
+
         public void ChatMessage(string message)
         {
             string time = DateTime.Now.ToString();
@@ -196,7 +184,6 @@ namespace ServerApp
                 if (!keyPair.Value.Equals(""))
                 {
                     keyPair.Key.messageClient(time);
-                    Console.WriteLine(time + " to " + keyPair.Value);
                 }
 
             }
