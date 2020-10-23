@@ -187,13 +187,16 @@ namespace ServerApp
 
         public void ChatMessage(string message)
         {
-            _chatLog.Add(message);
+            string time = DateTime.Now.ToString();
+            time += " | ";
+            time += message;
+            _chatLog.Add(time);
             foreach (KeyValuePair<Client, string> keyPair in connectedUsers)
             {
                 if (!keyPair.Value.Equals(""))
                 {
-                    keyPair.Key.messageClient(message);
-                    Console.WriteLine(message + " to " + keyPair.Value);
+                    keyPair.Key.messageClient(time);
+                    Console.WriteLine(time + " to " + keyPair.Value);
                 }
 
             }

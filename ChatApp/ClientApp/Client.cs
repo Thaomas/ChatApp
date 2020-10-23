@@ -170,7 +170,7 @@ namespace ClientApp
                         }
                         break;
                     }
-                case "CHATMESSAGE":
+                case "CHAT":
                     {
                         DataPacket<ChatPacket> d = data.GetData<ChatPacket>();
 
