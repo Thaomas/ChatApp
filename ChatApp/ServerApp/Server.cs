@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ServerApp
 {
@@ -24,8 +25,8 @@ namespace ServerApp
 
 
 
-            users = new Dictionary<string, string>();
-            _chatLog = new List<string>();
+            users = LoadUsers();
+            _chatLog = LoadChatLog();
 
 
 
@@ -35,8 +36,50 @@ namespace ServerApp
             this._listener = new TcpListener(ipAddres, _portNumber);
             this._listener.Start();
             this._listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
+
             LogMessage("Server is running");
             LogMessage($"Listening on {IPAddress.Loopback.ToString()}:{_portNumber}");
+
+            Timer timer = new Timer((e) =>
+            {
+                SaveUsers();
+                SaveChatLog();
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+
+        }
+
+        private void SaveChatLog()
+        {
+            List<string> log = GetChatLog();
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\ChatLog.txt");
+
+            using (StreamWriter writer = (File.Exists(path)) ? File.AppendText(path) : File.CreateText(path))
+            {
+                foreach (string message in log)
+                {
+                    writer.WriteLine(message);
+                }
+            }
+            Console.WriteLine("ChatLog saved");
+        }
+
+        private void SaveUsers()
+        {
+            Dictionary<string, string> listDict;
+            lock (users)
+            {
+            listDict = new Dictionary<string, string>(users);
+            }
+            string path = Environment.CurrentDirectory + @"\DataStorage\Users.txt";
+
+            using (StreamWriter writer = (File.Exists(path)) ? File.AppendText(path) : File.CreateText(path))
+            {
+                foreach (KeyValuePair<string, string> kvPair in listDict)
+                {
+                    writer.WriteLine($"{kvPair.Key}|{kvPair.Value}");
+                }
+            }
+            Console.WriteLine("Users saved");
         }
 
         private void OnConnect(IAsyncResult result)
@@ -52,6 +95,44 @@ namespace ServerApp
         {
             Console.WriteLine("[{0}] - Thread-{1}- {2}",
                     callername, Thread.CurrentThread.ManagedThreadId, message);
+        }
+
+
+        private List<string> LoadChatLog()
+        {
+            try
+            {
+                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\ChatLog.txt");
+                var log = File.ReadAllLines(path);
+                return new List<string>(log);
+            }
+            catch
+            {
+                Console.WriteLine("Error in loading ChatLog");
+                return new List<string>();
+            }
+        }
+
+        private Dictionary<string, string> LoadUsers()
+        {
+            Dictionary<string, string> users = new Dictionary<string, string>();
+            try
+            {
+                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\Users.txt");
+                var log = File.ReadAllLines(path);
+                foreach (string line in log)
+                {
+                    int index = line.IndexOf('|');
+                    users.Add(line.Substring(0, index), line.Substring(index+1));
+                }
+            }
+            catch(Exception e)
+            {
+                
+                Console.WriteLine("Error in loading Users");
+                Console.WriteLine(e.ToString());
+            }
+            return users;
         }
 
         public static string RegisterClient(Client client, string username, string password)

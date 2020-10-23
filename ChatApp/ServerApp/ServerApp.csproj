@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <StartupObject>ServerAppp.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChatAppLib\ChatAppLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DataStorage\Users.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Import Project="..\ServerUtils\ServerUtils.projitems" Label="Shared" />

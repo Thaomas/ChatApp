@@ -143,7 +143,7 @@ namespace ClientApp
             {
                 case "LOGINRESPONSE":
                     {
-                        DataPacket<LoginResponse> d = data.GetData<LoginResponse>();
+                        DataPacket<LoginResponsePacket> d = data.GetData<LoginResponsePacket>();
                         if (d.data.status == "OK")
                         {
                             this._loggedIn = true;
@@ -181,7 +181,7 @@ namespace ClientApp
                     {
                         DataPacket<ChatPacket> d = data.GetData<ChatPacket>();
 
-                        OnChatReceived?.Invoke(d.sender, $"{d.sender}: {d.data.chatMessage}\r\n");
+                        OnChatReceived?.Invoke(d.sender, $"{d.data.chatMessage}\r\n");
                         break;
                     }
                 default:
