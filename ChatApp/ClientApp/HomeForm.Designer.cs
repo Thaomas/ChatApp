@@ -32,7 +32,6 @@
             this.textBoxChatMessage = new System.Windows.Forms.TextBox();
             this.panelSendMessage = new System.Windows.Forms.Panel();
             this.textBoxChatLog = new System.Windows.Forms.TextBox();
-            this.panelTopMenu = new System.Windows.Forms.Panel();
             this.panelSendMessage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,20 +78,11 @@
             this.textBoxChatLog.Size = new System.Drawing.Size(800, 414);
             this.textBoxChatLog.TabIndex = 35;
             // 
-            // panelTopMenu
-            // 
-            this.panelTopMenu.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTopMenu.Location = new System.Drawing.Point(0, 0);
-            this.panelTopMenu.Name = "panelTopMenu";
-            this.panelTopMenu.Size = new System.Drawing.Size(800, 38);
-            this.panelTopMenu.TabIndex = 36;
-            // 
             // HomeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.panelTopMenu);
             this.Controls.Add(this.textBoxChatLog);
             this.Controls.Add(this.panelSendMessage);
             this.Name = "HomeForm";
@@ -115,6 +105,5 @@
         private System.Windows.Forms.TextBox textBoxChatMessage;
         private System.Windows.Forms.Panel panelSendMessage;
         private System.Windows.Forms.TextBox textBoxChatLog;
-        private System.Windows.Forms.Panel panelTopMenu;
     }
 }
