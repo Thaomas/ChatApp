@@ -34,4 +34,10 @@
 
 	<Import Project="..\ServerUtils\ServerUtils.projitems" Label="Shared" />
 
+  <ItemGroup>
+    <ProjectReference Include="..\ChatAppLib\ChatAppLib.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\ServerUtils\ServerUtils.projitems" Label="Shared" />
+
 </Project>

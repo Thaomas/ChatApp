@@ -9,14 +9,12 @@ namespace ServerUtils
 {
     public class DataPacket<T> : DAbstract where T : DAbstract
     {
-        public string sender;
-        public string type; // Id can for example be "chatMessage" or "LoginStatus"
-        public T data; // Content of the message
+        public string type; 
+        public T data; 
     }
 
     class DataPacket : DAbstract
     {
-        public string sender;
         public string type;
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         private JObject data;
@@ -24,7 +22,6 @@ namespace ServerUtils
         public DataPacket<T> GetData<T>() where T : DAbstract
         {
             return new DataPacket<T> {
-                sender = this.sender,
                 type = this.type, 
                 data = this.data.ToObject<T>() 
             };
@@ -40,6 +37,7 @@ namespace ServerUtils
     class RegisterResponsePacket : DAbstract
     {
         public string status;
+        public List<string> chatLog;
     }
 
     class LoginPacket : DAbstract
@@ -48,15 +46,25 @@ namespace ServerUtils
         public string password;
     }
 
-    class LoginResponse : DAbstract
+    class LoginResponsePacket : DAbstract
     {
         public string status;
+        public List<string> chatLog;
     }
 
     class ChatPacket : DAbstract
     {
-        public string receiver;
         public string chatMessage;
+    }
+
+    class DisconnectPacket : DAbstract
+    {
+
+    }
+
+    class DisconnectResponsePacket: DAbstract
+    {
+        public string status;
     }
 
 }
