@@ -57,7 +57,7 @@
             this.LoginButton.Location = new System.Drawing.Point(124, 292);
             this.LoginButton.Name = "LoginButton";
             this.LoginButton.Size = new System.Drawing.Size(75, 23);
-            this.LoginButton.TabIndex = 1;
+            this.LoginButton.TabIndex = 5;
             this.LoginButton.Text = "Login";
             this.LoginButton.UseVisualStyleBackColor = true;
             this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
@@ -68,14 +68,14 @@
             this.TextBoxPassword.Name = "TextBoxPassword";
             this.TextBoxPassword.PasswordChar = '*';
             this.TextBoxPassword.Size = new System.Drawing.Size(100, 23);
-            this.TextBoxPassword.TabIndex = 2;
+            this.TextBoxPassword.TabIndex = 3;
             // 
             // TextBoxUsername
             // 
             this.TextBoxUsername.Location = new System.Drawing.Point(201, 187);
             this.TextBoxUsername.Name = "TextBoxUsername";
             this.TextBoxUsername.Size = new System.Drawing.Size(100, 23);
-            this.TextBoxUsername.TabIndex = 3;
+            this.TextBoxUsername.TabIndex = 2;
             // 
             // NameLabel
             // 
@@ -112,7 +112,7 @@
             this.TextBoxIP.Location = new System.Drawing.Point(79, 79);
             this.TextBoxIP.Name = "TextBoxIP";
             this.TextBoxIP.Size = new System.Drawing.Size(100, 23);
-            this.TextBoxIP.TabIndex = 3;
+            this.TextBoxIP.TabIndex = 0;
             this.TextBoxIP.Text = "127.0.0.1";
             // 
             // label1
@@ -130,7 +130,7 @@
             this.TextBoxPort.Location = new System.Drawing.Point(247, 79);
             this.TextBoxPort.Name = "TextBoxPort";
             this.TextBoxPort.Size = new System.Drawing.Size(100, 23);
-            this.TextBoxPort.TabIndex = 3;
+            this.TextBoxPort.TabIndex = 1;
             this.TextBoxPort.Text = "51510";
             // 
             // label3
