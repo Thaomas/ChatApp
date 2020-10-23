@@ -17,7 +17,6 @@ namespace ClientApp
         private TcpClient _client;
         private NetworkStream _stream;
         private byte[] _buffer = new byte[4];
-        public string username;
         private bool _loggedIn = false;
         private bool _registered = false;
 
@@ -50,8 +49,6 @@ namespace ClientApp
 
         public void SendLogin(string username, string password)
         {
-            this.username = username;
-            //Send username and password to check
             List<byte> sendBuffer = new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(
                 new DataPacket<LoginPacket>()
             {
@@ -63,17 +60,12 @@ namespace ClientApp
 
                 }
             })));
-            // append the message length (in bytes)
             sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
-
-            // send the message
             this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
         }
 
         public void SendRegister(string username, string password)
         {
-            this.username = username;
-            //Send username and password to check
             List<byte> sendBuffer = new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(
                 new DataPacket<RegisterPacket>()
             {
@@ -85,10 +77,7 @@ namespace ClientApp
 
                 }
             })));
-            // append the message length (in bytes)
             sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
-
-            // send the message
             this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
         }
 
