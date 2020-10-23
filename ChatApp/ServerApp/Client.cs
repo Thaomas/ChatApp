@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.VisualBasic.CompilerServices;
+using Newtonsoft.Json;
 using ServerUtils;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,17 @@ namespace ServerApp
     class Client
     {
         private TcpClient _tcpClient;
+        public TcpClient TcpClient { get { return this._tcpClient; } }
         private NetworkStream _stream;
         private byte[] _buffer = new byte[4];
         private string _username;
-        private bool loggedIn;
+        public string Username { set { this._username = value; } }
 
         public Client(TcpClient tcpClient)
         {
-            this.loggedIn = false;
             this._tcpClient = tcpClient;
             this._stream = this._tcpClient.GetStream();
+            this._username = "";
             this._stream.BeginRead(this._buffer, 0, this._buffer.Length,  new AsyncCallback(RecieveLength), null);
 
         }
@@ -37,39 +39,103 @@ namespace ServerApp
             string data = System.Text.Encoding.ASCII.GetString(this._buffer);
 
             DataPacket packet = JsonConvert.DeserializeObject<DataPacket>(data);
-            parseData(packet);
+            parseDataAsync(packet);
 
             this._buffer = new byte[4];
             this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(RecieveLength), null);
         }
 
-        private void parseData(DataPacket data)
+        private async System.Threading.Tasks.Task parseDataAsync(DataPacket data)
         {
             switch (data.type)
             {
                 case "LOGIN":
                     {
                         DataPacket<LoginPacket> d = data.GetData<LoginPacket>();
-
-                        if (Server.users.ContainsKey(d.data.username) && Server.users[d.data.username].Equals(d.data.password)){
-
-                        }
-                        else
+                        List<string> chatlog = new List<string>();
+                        string response = Server.LoginClient(this , d.data.username, d.data.password);
+                        if (response.Equals("OK"))
                         {
-
+                            chatlog = Server.GetChatLog();
                         }
 
+                        SendPacket(new DataPacket<LoginResponsePacket>()
+                        {
+                            type = "LOGINRESPONSE",
+                            data = new LoginResponsePacket()
+                            {
+                                status = response,
+                                chatLog = chatlog
+                            }
+                        }.ToJson());
                         break;
                     }
                 case "REGISTER":
                     {
+                        DataPacket<RegisterPacket> d = data.GetData<RegisterPacket>();
+                        List<string> chatlog = new List<string>();
+                        string response = Server.RegisterClient(this, d.data.username, d.data.password);
+                        if (response.Equals("OK"))
+                        {
+                            chatlog = Server.GetChatLog();
+                        }
+                        SendPacket(new DataPacket<RegisterResponsePacket>()
+                        {
+                            type = "REGISTERRESPONSE",
+                            data = new RegisterResponsePacket()
+                            {
+                                status = response,
+                                chatLog = chatlog
+                            }
+                        }.ToJson());
                         break;
                     }
                 case "CHAT":
                     {
+                        if (!_username.Equals("")) {
+                            DataPacket<ChatPacket> d = data.GetData<ChatPacket>();
+                            Server.ChatMessage($"{_username}: {d.data.chatMessage}");
+                        }
+                        break;
+                    }
+                case "DISCONNECT":
+                    {
+                        Server.DisconnectClient(this);
+                        SendPacket(new DataPacket<DisconnectResponsePacket>
+                        {
+                            type = "DISCONNECTRESPONSE",
+                            data = new DisconnectResponsePacket()
+                            {
+                                status = "OK"
+                            }
+                        }.ToJson());
+                        _tcpClient.Close();
+                    break;
+                    }
+                default:
+                    {
                         break;
                     }
             }
+        }
+
+        private void SendPacket(string packet)
+        {
+            List<byte> buffer = new List<byte>(Encoding.ASCII.GetBytes(packet));
+            buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
+            this._stream.Write(buffer.ToArray(), 0, buffer.Count);
+        }
+
+        public void messageClient(string message)
+        {
+            SendPacket(new DataPacket<ChatPacket>()
+            {
+                type = "CHATMESSAGE", 
+                data = new ChatPacket()
+                {
+                    chatMessage = message
+                }
+            }.ToJson());
         }
     }
 }

@@ -6,4 +6,10 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ChatAppLib\ChatAppLib.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\ServerUtils\ServerUtils.projitems" Label="Shared" />
+
 </Project>
