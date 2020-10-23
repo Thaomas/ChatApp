@@ -18,12 +18,14 @@ namespace ServerApp
         private byte[] _buffer = new byte[4];
         private string _username;
         public string Username { set { this._username = value; } }
+        private Server _server;
 
-        public Client(TcpClient tcpClient)
+        public Client(TcpClient tcpClient, Server server)
         {
             this._tcpClient = tcpClient;
             this._stream = this._tcpClient.GetStream();
             this._username = "";
+            this._server = server;
             this._stream.BeginRead(this._buffer, 0, this._buffer.Length,  new AsyncCallback(RecieveLength), null);
             Console.WriteLine("Begin read client");
         }
@@ -56,10 +58,10 @@ namespace ServerApp
                     {
                         DataPacket<LoginPacket> d = data.GetData<LoginPacket>();
                         List<string> chatlog = new List<string>();
-                        string response = Server.LoginClient(this , d.data.username, d.data.password);
+                        string response = _server.LoginClient(this , d.data.username, d.data.password);
                         if (response.Equals("OK"))
                         {
-                            chatlog = Server.GetChatLog();
+                            chatlog = _server.GetChatLog();
                         }
 
                         SendPacket(new DataPacket<LoginResponsePacket>()
@@ -77,10 +79,10 @@ namespace ServerApp
                     {
                         DataPacket<RegisterPacket> d = data.GetData<RegisterPacket>();
                         List<string> chatlog = new List<string>();
-                        string response = Server.RegisterClient(this, d.data.username, d.data.password);
+                        string response = _server.RegisterClient(this, d.data.username, d.data.password);
                         if (response.Equals("OK"))
                         {
-                            chatlog = Server.GetChatLog();
+                            chatlog = _server.GetChatLog();
                         }
                         SendPacket(new DataPacket<RegisterResponsePacket>()
                         {
@@ -97,13 +99,13 @@ namespace ServerApp
                     {
                         if (!_username.Equals("")) {
                             DataPacket<ChatPacket> d = data.GetData<ChatPacket>();
-                            Server.ChatMessage($"{_username}: {d.data.chatMessage}");
+                            _server.ChatMessage($"{_username}: {d.data.chatMessage}");
                         }
                         break;
                     }
                 case "DISCONNECT":
                     {
-                        Server.DisconnectClient(this);
+                        _server.DisconnectClient(this);
                         SendPacket(new DataPacket<DisconnectResponsePacket>
                         {
                             type = "DISCONNECTRESPONSE",

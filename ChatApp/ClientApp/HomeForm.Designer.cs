@@ -41,7 +41,7 @@
             this.buttonSend.Dock = System.Windows.Forms.DockStyle.Right;
             this.buttonSend.Location = new System.Drawing.Point(725, 0);
             this.buttonSend.Name = "buttonSend";
-            this.buttonSend.Size = new System.Drawing.Size(75, 42);
+            this.buttonSend.Size = new System.Drawing.Size(75, 36);
             this.buttonSend.TabIndex = 0;
             this.buttonSend.Text = "Send";
             this.buttonSend.UseVisualStyleBackColor = true;
@@ -49,11 +49,12 @@
             // 
             // textBoxChatMessage
             // 
+            this.textBoxChatMessage.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxChatMessage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxChatMessage.Location = new System.Drawing.Point(0, 0);
             this.textBoxChatMessage.Multiline = true;
             this.textBoxChatMessage.Name = "textBoxChatMessage";
-            this.textBoxChatMessage.Size = new System.Drawing.Size(725, 42);
+            this.textBoxChatMessage.Size = new System.Drawing.Size(725, 36);
             this.textBoxChatMessage.TabIndex = 1;
             this.textBoxChatMessage.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxChatMessage_KeyPress);
             // 
@@ -62,9 +63,9 @@
             this.panelSendMessage.Controls.Add(this.textBoxChatMessage);
             this.panelSendMessage.Controls.Add(this.buttonSend);
             this.panelSendMessage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelSendMessage.Location = new System.Drawing.Point(0, 408);
+            this.panelSendMessage.Location = new System.Drawing.Point(0, 414);
             this.panelSendMessage.Name = "panelSendMessage";
-            this.panelSendMessage.Size = new System.Drawing.Size(800, 42);
+            this.panelSendMessage.Size = new System.Drawing.Size(800, 36);
             this.panelSendMessage.TabIndex = 2;
             // 
             // textBoxChatLog
@@ -75,7 +76,7 @@
             this.textBoxChatLog.Name = "textBoxChatLog";
             this.textBoxChatLog.ReadOnly = true;
             this.textBoxChatLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxChatLog.Size = new System.Drawing.Size(800, 408);
+            this.textBoxChatLog.Size = new System.Drawing.Size(800, 414);
             this.textBoxChatLog.TabIndex = 35;
             // 
             // panelTopMenu

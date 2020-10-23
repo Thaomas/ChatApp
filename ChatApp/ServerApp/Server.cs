@@ -14,13 +14,14 @@ namespace ServerApp
     {
         private int _portNumber;
         private TcpListener _listener;
-        public static Dictionary<string, string> users;
-        private static Dictionary<Client, string> connectedUsers;
-        private static List<string> _chatLog;
-        private static List<Client> tempConn;
+        public  Dictionary<string, string> users;
+        private  Dictionary<Client, string> connectedUsers;
+        private  List<string> _chatLog;
+        private  List<Client> tempConn;
 
         public Server(int port)
         {
+            Console.WriteLine("Begin server");
             _portNumber = port;
 
 
@@ -52,14 +53,7 @@ namespace ServerApp
         {
             List<string> log = GetChatLog();
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\ChatLog.txt");
-
-            using (StreamWriter writer = (File.Exists(path)) ? File.AppendText(path) : File.CreateText(path))
-            {
-                foreach (string message in log)
-                {
-                    writer.WriteLine(message);
-                }
-            }
+            File.WriteAllLines(path, log);
             Console.WriteLine("ChatLog saved");
         }
 
@@ -70,15 +64,14 @@ namespace ServerApp
             {
             listDict = new Dictionary<string, string>(users);
             }
-            string path = Environment.CurrentDirectory + @"\DataStorage\Users.txt";
-
-            using (StreamWriter writer = (File.Exists(path)) ? File.AppendText(path) : File.CreateText(path))
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\Users.txt");
+            Console.WriteLine(path);
+            List<string> userList = new List<string>();
+            foreach(KeyValuePair<string, string> kvPair in listDict)
             {
-                foreach (KeyValuePair<string, string> kvPair in listDict)
-                {
-                    writer.WriteLine($"{kvPair.Key}|{kvPair.Value}");
-                }
+                userList.Add($"{kvPair.Key}|{kvPair.Value}");
             }
+            File.WriteAllLines(path, userList);
             Console.WriteLine("Users saved");
         }
 
@@ -86,7 +79,7 @@ namespace ServerApp
         {
             var client = this._listener.EndAcceptTcpClient(result);
 
-            tempConn.Add(new Client(client));
+            tempConn.Add(new Client(client, this));
 
             _listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
@@ -135,7 +128,7 @@ namespace ServerApp
             return users;
         }
 
-        public static string RegisterClient(Client client, string username, string password)
+        public string RegisterClient(Client client, string username, string password)
         {
             lock (users)
             {
@@ -156,16 +149,16 @@ namespace ServerApp
             }
         }
 
-        public static List<string> GetChatLog()
+        public List<string> GetChatLog()
         {
             return _chatLog;
         }
 
-        public static string LoginClient(Client client, string username, string password)
+        public string LoginClient(Client client, string username, string password)
         {
             lock (connectedUsers) lock (users)
             {
-                    if (users.ContainsKey(username) && Server.users[username].Equals(password))
+                    if (users.ContainsKey(username) && users[username].Equals(password))
                     {
                         if (!connectedUsers.ContainsValue(username) && !connectedUsers.ContainsKey(client))
                         {
@@ -188,14 +181,14 @@ namespace ServerApp
             }
         }
 
-        public static void DisconnectClient(Client client)
+        public void DisconnectClient(Client client)
         {
             connectedUsers.Remove(client);
             client.Username = "";
 
         }
 
-        public static void ChatMessage(string message)
+        public void ChatMessage(string message)
         {
             _chatLog.Add(message);
             foreach (KeyValuePair<Client, string> keyPair in connectedUsers)

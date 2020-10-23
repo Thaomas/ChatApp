@@ -40,7 +40,7 @@ namespace ClientApp
         private void buttonSend_Click()
         {
             this.client.SendChatMessage(textBoxChatMessage.Text);
-            textBoxChatMessage.Text = "";
+            textBoxChatMessage.Clear();
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
