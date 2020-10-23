@@ -55,7 +55,7 @@
             this.textBoxChatMessage.Name = "textBoxChatMessage";
             this.textBoxChatMessage.Size = new System.Drawing.Size(725, 36);
             this.textBoxChatMessage.TabIndex = 1;
-            this.textBoxChatMessage.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxChatMessage_KeyPress);
+            this.textBoxChatMessage.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxChatMessage_KeyPress);
             // 
             // panelSendMessage
             // 
@@ -86,7 +86,7 @@
             this.Controls.Add(this.textBoxChatLog);
             this.Controls.Add(this.panelSendMessage);
             this.Name = "HomeForm";
-            this.Text = "Form1";
+            this.Text = "Chat";
             this.panelSendMessage.ResumeLayout(false);
             this.panelSendMessage.PerformLayout();
             this.ResumeLayout(false);
@@ -94,10 +94,6 @@
 
         }
 
-        private void TextBoxChatMessage_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
 
         #endregion
 

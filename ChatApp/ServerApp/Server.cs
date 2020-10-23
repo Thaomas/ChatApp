@@ -32,13 +32,13 @@ namespace ServerApp
 
             connectedUsers = new Dictionary<Client, string>();
             tempConn = new List<Client>();
-            IPAddress ipAddres = IPAddress.Loopback;
+            IPAddress ipAddres = IPAddress.Parse("192.168.112.16");
             this._listener = new TcpListener(ipAddres, _portNumber);
             this._listener.Start();
             this._listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
 
             LogMessage("Server is running");
-            LogMessage($"Listening on {IPAddress.Loopback.ToString()}:{_portNumber}");
+            LogMessage($"Listening on {ipAddres.ToString()}:{_portNumber}");
 
             Timer timer = new Timer((e) =>
             {

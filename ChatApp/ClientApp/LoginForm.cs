@@ -56,6 +56,11 @@ namespace ClientApp
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
+            Login();   
+        }
+
+        private void Login()
+        {
             if (!(TextBoxIP.Text == null || TextBoxPort.Text == null) && (TextBoxIP.Text != this.ip || TextBoxPort.Text != this.port))
             {
                 _client.Disconnect();
@@ -79,6 +84,23 @@ namespace ClientApp
             _client.SendRegister(TextBoxUsername.Text, TextBoxPassword.Text);
 
         }
+        
+        public void TextBoxUsername_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(e.KeyChar == (char)Keys.Enter)
+            {
+                TextBoxPassword.Focus();
+                e.Handled = true;
+            }
 
+        }
+        public void TextBoxPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                Login();
+                e.Handled = true;
+            }
+        }
     }
 }

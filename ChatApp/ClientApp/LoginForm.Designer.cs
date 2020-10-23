@@ -62,6 +62,14 @@
             this.LoginButton.UseVisualStyleBackColor = true;
             this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
             // 
+            // TextBoxUsername
+            // 
+            this.TextBoxUsername.Location = new System.Drawing.Point(201, 187);
+            this.TextBoxUsername.Name = "TextBoxUsername";
+            this.TextBoxUsername.Size = new System.Drawing.Size(100, 23);
+            this.TextBoxUsername.TabIndex = 2;
+            this.TextBoxUsername.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxUsername_KeyPress);
+            // 
             // TextBoxPassword
             // 
             this.TextBoxPassword.Location = new System.Drawing.Point(201, 233);
@@ -69,13 +77,7 @@
             this.TextBoxPassword.PasswordChar = '*';
             this.TextBoxPassword.Size = new System.Drawing.Size(100, 23);
             this.TextBoxPassword.TabIndex = 3;
-            // 
-            // TextBoxUsername
-            // 
-            this.TextBoxUsername.Location = new System.Drawing.Point(201, 187);
-            this.TextBoxUsername.Name = "TextBoxUsername";
-            this.TextBoxUsername.Size = new System.Drawing.Size(100, 23);
-            this.TextBoxUsername.TabIndex = 2;
+            this.TextBoxPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxPassword_KeyPress);
             // 
             // NameLabel
             // 

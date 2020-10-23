@@ -11,16 +11,20 @@ namespace ClientApp
         public HomeForm(Client client, List<string> chatLog)
         {
             InitializeComponent();
+            Shown += HomeForm_Shown;
             this.client = client;
             this.client.OnChatReceived += Client_OnChatReceived;
 
             foreach (string message in chatLog)
             {
                 textBoxChatLog.Text += message + Environment.NewLine;
-                textBoxChatLog.SelectionStart = textBoxChatLog.Text.Length;
-                textBoxChatLog.ScrollToCaret();
             }
-
+        }
+        
+        private void HomeForm_Shown(Object sender, EventArgs e)
+        {
+            textBoxChatLog.SelectionStart = textBoxChatLog.Text.Length;
+            textBoxChatLog.ScrollToCaret();
         }
 
         public void Client_OnChatReceived(string message)
@@ -33,11 +37,12 @@ namespace ClientApp
             });
         }
 
-        private void textBoxChatMessage_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBoxChatMessage_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
                 buttonSend_Click();
+                e.Handled = true;
             }
         }
 
@@ -45,6 +50,7 @@ namespace ClientApp
         {
             this.client.SendChatMessage(textBoxChatMessage.Text);
             textBoxChatMessage.Clear();
+            textBoxChatMessage.Focus();
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
