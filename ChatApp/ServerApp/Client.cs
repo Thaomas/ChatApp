@@ -135,7 +135,7 @@ namespace ServerApp
         {
             SendPacket(new DataPacket<ChatPacket>()
             {
-                type = "CHATMESSAGE", 
+                type = "CHAT", 
                 data = new ChatPacket()
                 {
                     chatMessage = message

@@ -194,6 +194,12 @@ namespace ClientApp
             }
 
         }
+        public void Disconnect()
+        {
+            if (this._client.Connected)
+            {
+                this._client.Close();
+            }
+        }
     }
-
 }

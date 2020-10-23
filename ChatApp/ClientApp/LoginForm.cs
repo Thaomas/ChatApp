@@ -16,6 +16,8 @@ namespace ClientApp
     {
 
         private Client _client;
+        private string ip = "";
+        private string port = "";
 
         public LoginForm()
         {
@@ -59,10 +61,12 @@ namespace ClientApp
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            if (!(TextBoxIP.Text == null) || !(TextBoxPort.Text == null) && !((IPEndPoint)_client.RemoteEndPoint).Address.ToString().Equals(TextBoxIP.Text) || !((IPEndPoint)_client.RemoteEndPoint).Port.Equals(TextBoxPort.Text))
+            if ( !(TextBoxIP.Text == null || TextBoxPort.Text == null ) && (TextBoxIP.Text != this.ip || TextBoxPort.Text != this.port))
             {
+                _client.Disconnect();
                 _client.ConnectAsync(IPAddress.Parse(TextBoxIP.Text), Convert.ToInt32(TextBoxPort.Text));
-
+                this.ip = TextBoxIP.Text;
+                this.port = TextBoxPort.Text;
             }
             _client.SendLogin(TextBoxUsername.Text, TextBoxPassword.Text);
         }
