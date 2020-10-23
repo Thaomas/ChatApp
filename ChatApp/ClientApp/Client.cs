@@ -167,6 +167,10 @@ namespace ClientApp
                             this._registered = true;
                             OnRegister?.Invoke(this._registered);
                             Console.WriteLine("You are Registered");
+
+                            this._loggedIn = true;
+                            OnLogin?.Invoke(this._loggedIn);
+                            Console.WriteLine("You are logged in!");
                         }
                         else if (d.data.status == ("ERROR"))
                         {
@@ -177,7 +181,7 @@ namespace ClientApp
                         }
                         break;
                     }
-                case "CHAT":
+                case "CHATMESSAGE":
                     {
                         DataPacket<ChatPacket> d = data.GetData<ChatPacket>();
 
