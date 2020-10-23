@@ -9,7 +9,7 @@ using System.Text;
 namespace ClientApp
 {
 
-    public delegate void LoginCallback(bool status);
+    public delegate void LoginCallback(bool status, List<string> chatlog);
     public delegate void RegisterCallback(bool status);
     public delegate void ChatCallback(string message);
     public class Client
@@ -51,15 +51,15 @@ namespace ClientApp
         {
             List<byte> sendBuffer = new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(
                 new DataPacket<LoginPacket>()
-            {
-                type = "LOGIN",
-                data = new LoginPacket()
                 {
-                    username = username,
-                    password = password
+                    type = "LOGIN",
+                    data = new LoginPacket()
+                    {
+                        username = username,
+                        password = password
 
-                }
-            })));
+                    }
+                })));
             sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
             this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
         }
@@ -68,15 +68,15 @@ namespace ClientApp
         {
             List<byte> sendBuffer = new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(
                 new DataPacket<RegisterPacket>()
-            {
-                type = "REGISTER",
-                data = new RegisterPacket()
                 {
-                    username = username,
-                    password = password
+                    type = "REGISTER",
+                    data = new RegisterPacket()
+                    {
+                        username = username,
+                        password = password
 
-                }
-            })));
+                    }
+                })));
             sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
             this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
         }
@@ -136,13 +136,13 @@ namespace ClientApp
                         if (d.data.status == "OK")
                         {
                             this._loggedIn = true;
-                            OnLogin?.Invoke(this._loggedIn);
+                            OnLogin?.Invoke(this._loggedIn, d.data.chatLog);
                             Console.WriteLine("You are logged in!");
                         }
                         else if (d.data.status == ("ERROR"))
                         {
                             this._loggedIn = false;
-                            OnLogin?.Invoke(this._loggedIn);
+                            OnLogin?.Invoke(this._loggedIn, d.data.chatLog);
                             Console.WriteLine("Your username and/or password is not valid!");
 
                         }
@@ -158,7 +158,7 @@ namespace ClientApp
                             Console.WriteLine("You are Registered");
 
                             this._loggedIn = true;
-                            OnLogin?.Invoke(this._loggedIn);
+                            OnLogin?.Invoke(this._loggedIn, d.data.chatLog);
                             Console.WriteLine("You are logged in!");
                         }
                         else if (d.data.status == ("ERROR"))

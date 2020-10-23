@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ClientApp
@@ -12,11 +8,19 @@ namespace ClientApp
     {
 
         private Client client;
-        public HomeForm(Client client)
+        public HomeForm(Client client, List<string> chatLog)
         {
             InitializeComponent();
-            this.client = client;   
+            this.client = client;
             this.client.OnChatReceived += Client_OnChatReceived;
+
+            foreach (string message in chatLog)
+            {
+                textBoxChatLog.Text += message + Environment.NewLine;
+                textBoxChatLog.SelectionStart = textBoxChatLog.Text.Length;
+                textBoxChatLog.ScrollToCaret();
+            }
+
         }
 
         public void Client_OnChatReceived(string message)
@@ -31,7 +35,7 @@ namespace ClientApp
 
         private void textBoxChatMessage_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if(e.KeyChar == (char)Keys.Enter)
+            if (e.KeyChar == (char)Keys.Enter)
             {
                 buttonSend_Click();
             }

@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ClientApp
@@ -26,12 +19,13 @@ namespace ClientApp
             this._client.OnLogin += Client_OnLogin;
             this._client.OnRegister += Client_OnRegister;
         }
-        private void Client_OnLogin(bool status)
+        private void Client_OnLogin(bool status, List<string> chatlog)
         {
-            this.Invoke((Action)delegate {
+            this.Invoke((Action)delegate
+            {
                 if (status)
                 {
-                    HomeForm homePageForm = new HomeForm(_client);
+                    HomeForm homePageForm = new HomeForm(_client, chatlog);
                     homePageForm.Show();
                     this.Hide();
                 }
@@ -45,7 +39,8 @@ namespace ClientApp
 
         private void Client_OnRegister(bool status)
         {
-            this.Invoke((Action)delegate {
+            this.Invoke((Action)delegate
+            {
                 if (status)
                 {
                     MessageBox.Show("Registration succesfull");
@@ -61,7 +56,7 @@ namespace ClientApp
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            if ( !(TextBoxIP.Text == null || TextBoxPort.Text == null ) && (TextBoxIP.Text != this.ip || TextBoxPort.Text != this.port))
+            if (!(TextBoxIP.Text == null || TextBoxPort.Text == null) && (TextBoxIP.Text != this.ip || TextBoxPort.Text != this.port))
             {
                 _client.Disconnect();
                 _client.ConnectAsync(IPAddress.Parse(TextBoxIP.Text), Convert.ToInt32(TextBoxPort.Text));

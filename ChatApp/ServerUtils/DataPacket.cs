@@ -1,16 +1,14 @@
 ﻿using ChatAppLib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ServerUtils
 {
     public class DataPacket<T> : DAbstract where T : DAbstract
     {
-        public string type; 
-        public T data; 
+        public string type;
+        public T data;
     }
 
     class DataPacket : DAbstract
@@ -21,9 +19,10 @@ namespace ServerUtils
 
         public DataPacket<T> GetData<T>() where T : DAbstract
         {
-            return new DataPacket<T> {
-                type = this.type, 
-                data = this.data.ToObject<T>() 
+            return new DataPacket<T>
+            {
+                type = this.type,
+                data = this.data.ToObject<T>()
             };
         }
     }
@@ -62,7 +61,7 @@ namespace ServerUtils
 
     }
 
-    class DisconnectResponsePacket: DAbstract
+    class DisconnectResponsePacket : DAbstract
     {
         public string status;
     }

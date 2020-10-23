@@ -1,11 +1,9 @@
-﻿using Microsoft.VisualBasic.CompilerServices;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using ServerUtils;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
-using System.Web;
 using System.Threading.Tasks;
 
 namespace ServerApp
@@ -26,7 +24,7 @@ namespace ServerApp
             this._stream = this._tcpClient.GetStream();
             this._username = "";
             this._server = server;
-            this._stream.BeginRead(this._buffer, 0, this._buffer.Length,  new AsyncCallback(RecieveLength), null);
+            this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(RecieveLength), null);
             Console.WriteLine("Begin read client");
         }
 
@@ -58,7 +56,7 @@ namespace ServerApp
                     {
                         DataPacket<LoginPacket> d = data.GetData<LoginPacket>();
                         List<string> chatlog = new List<string>();
-                        string response = _server.LoginClient(this , d.data.username, d.data.password);
+                        string response = _server.LoginClient(this, d.data.username, d.data.password);
                         if (response.Equals("OK"))
                         {
                             chatlog = _server.GetChatLog();
@@ -97,7 +95,8 @@ namespace ServerApp
                     }
                 case "CHAT":
                     {
-                        if (!_username.Equals("")) {
+                        if (!_username.Equals(""))
+                        {
                             DataPacket<ChatPacket> d = data.GetData<ChatPacket>();
                             _server.ChatMessage($"{_username}: {d.data.chatMessage}");
                         }
@@ -115,7 +114,7 @@ namespace ServerApp
                             }
                         }.ToJson());
                         _tcpClient.Close();
-                    break;
+                        break;
                     }
                 default:
                     {
@@ -135,7 +134,7 @@ namespace ServerApp
         {
             SendPacket(new DataPacket<ChatPacket>()
             {
-                type = "CHAT", 
+                type = "CHAT",
                 data = new ChatPacket()
                 {
                     chatMessage = message

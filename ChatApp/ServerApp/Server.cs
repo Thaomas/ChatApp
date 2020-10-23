@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -14,10 +13,10 @@ namespace ServerApp
     {
         private int _portNumber;
         private TcpListener _listener;
-        public  Dictionary<string, string> users;
-        private  Dictionary<Client, string> connectedUsers;
-        private  List<string> _chatLog;
-        private  List<Client> tempConn;
+        public Dictionary<string, string> users;
+        private Dictionary<Client, string> connectedUsers;
+        private List<string> _chatLog;
+        private List<Client> tempConn;
 
         public Server(int port)
         {
@@ -45,7 +44,7 @@ namespace ServerApp
             {
                 SaveUsers();
                 SaveChatLog();
-            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
 
         }
 
@@ -54,7 +53,6 @@ namespace ServerApp
             List<string> log = GetChatLog();
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\ChatLog.txt");
             File.WriteAllLines(path, log);
-            Console.WriteLine("ChatLog saved");
         }
 
         private void SaveUsers()
@@ -62,17 +60,15 @@ namespace ServerApp
             Dictionary<string, string> listDict;
             lock (users)
             {
-            listDict = new Dictionary<string, string>(users);
+                listDict = new Dictionary<string, string>(users);
             }
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\Users.txt");
-            Console.WriteLine(path);
             List<string> userList = new List<string>();
-            foreach(KeyValuePair<string, string> kvPair in listDict)
+            foreach (KeyValuePair<string, string> kvPair in listDict)
             {
                 userList.Add($"{kvPair.Key}|{kvPair.Value}");
             }
             File.WriteAllLines(path, userList);
-            Console.WriteLine("Users saved");
         }
 
         private void OnConnect(IAsyncResult result)
@@ -116,16 +112,20 @@ namespace ServerApp
                 foreach (string line in log)
                 {
                     int index = line.IndexOf('|');
-                    users.Add(line.Substring(0, index), line.Substring(index+1));
+                    users.Add(line.Substring(0, index), line.Substring(index + 1));
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                
+
                 Console.WriteLine("Error in loading Users");
                 Console.WriteLine(e.ToString());
             }
             return users;
+        }
+        public List<string> GetChatLog()
+        {
+            return _chatLog;
         }
 
         public string RegisterClient(Client client, string username, string password)
@@ -136,11 +136,11 @@ namespace ServerApp
                 {
                     users.Add(username, password);
                     lock (connectedUsers) lock (tempConn)
-                    {
-                        tempConn.Remove(client);
-
-                        connectedUsers.Add(client, username);
-                    }
+                        {
+                            tempConn.Remove(client);
+                            connectedUsers.Add(client, username);
+                            client.Username = username;
+                        }
 
                     return "OK";
                 }
@@ -149,24 +149,21 @@ namespace ServerApp
             }
         }
 
-        public List<string> GetChatLog()
-        {
-            return _chatLog;
-        }
+
 
         public string LoginClient(Client client, string username, string password)
         {
             lock (connectedUsers) lock (users)
-            {
+                {
                     if (users.ContainsKey(username) && users[username].Equals(password))
                     {
                         if (!connectedUsers.ContainsValue(username) && !connectedUsers.ContainsKey(client))
                         {
-                        connectedUsers.Add(client, username);
+                            connectedUsers.Add(client, username);
                             lock (tempConn)
-                        tempConn.Remove(client);
+                                tempConn.Remove(client);
                             client.Username = username;
-                        return "OK";
+                            return "OK";
                         }
                         else
                         {
@@ -177,8 +174,8 @@ namespace ServerApp
                     {
                         return "ERROR";
                     }
-            
-            }
+
+                }
         }
 
         public void DisconnectClient(Client client)
@@ -198,7 +195,7 @@ namespace ServerApp
                     keyPair.Key.messageClient(message);
                     Console.WriteLine(message + " to " + keyPair.Value);
                 }
-               
+
             }
         }
     }
