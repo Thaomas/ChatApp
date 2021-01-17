@@ -38,13 +38,23 @@ namespace ClientApp
 
         public void Connect(IAsyncResult ar)
         {
-            this._client.EndConnect(ar);
-
-            if (!this._loggedIn)
+            if (_client != null)
             {
-                this._stream = _client.GetStream();
+                try
+                {
+                    this._client.EndConnect(ar);
+                }
+                catch (Exception e)
+                {
+                    return;
+                }
+
+                if (!this._loggedIn)
+                {
+                    this._stream = _client.GetStream();
+                }
+                this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(ReceiveLengthInt), null);
             }
-            this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(ReceiveLengthInt), null);
         }
 
         private void ReceiveLengthInt(IAsyncResult ar)
@@ -126,55 +136,67 @@ namespace ClientApp
 
         public void SendLogin(string username, string password)
         {
-            List<byte> sendBuffer = new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(
-                new DataPacket<LoginPacket>()
-                {
-                    type = "LOGIN",
-                    data = new LoginPacket()
-                    {
-                        username = username,
-                        password = password
+            sendPackage(new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(
+                 new DataPacket<LoginPacket>()
+                 {
+                     type = "LOGIN",
+                     data = new LoginPacket()
+                     {
+                         username = username,
+                         password = password
 
-                    }
-                })));
-            sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
-            this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
+                     }
+                 }))));
         }
 
         public void SendRegister(string username, string password)
         {
-            List<byte> sendBuffer = new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(
-                new DataPacket<RegisterPacket>()
-                {
-                    type = "REGISTER",
-                    data = new RegisterPacket()
-                    {
-                        username = username,
-                        password = password
+            sendPackage(new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(
+                 new DataPacket<RegisterPacket>()
+                 {
+                     type = "REGISTER",
+                     data = new RegisterPacket()
+                     {
+                         username = username,
+                         password = password
 
-                    }
-                })));
-            sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
-            this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
+                     }
+                 }))));
         }
 
         public void SendChatMessage(string message)
         {
             if (this._loggedIn)
             {
-                DataPacket<ChatPacket> dataPacket = new DataPacket<ChatPacket>()
+                sendPackage(new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new DataPacket<ChatPacket>()
                 {
                     type = "CHAT",
                     data = new ChatPacket()
                     {
                         chatMessage = message
                     }
-                };
+                }))));
+            }
+        }
 
-                List<byte> sendBuffer = new List<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(dataPacket)));
-
-                sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
-                this._stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
+        private void sendPackage(List<byte> sendBuffer)
+        {
+            sendBuffer.InsertRange(0, BitConverter.GetBytes(sendBuffer.Count));
+            Console.WriteLine(_stream);
+            if (_stream != null)
+            {
+                try
+                {
+                    _stream.Write(sendBuffer.ToArray(), 0, sendBuffer.Count);
+                }
+                catch (Exception)
+                {
+                    System.Windows.Forms.MessageBox.Show("Error when connecting to server");
+                }
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("No server connected");
             }
         }
 

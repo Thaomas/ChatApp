@@ -92,7 +92,6 @@ namespace ClientApp
                 TextBoxPassword.Focus();
                 e.Handled = true;
             }
-
         }
 
         public void TextBoxPassword_KeyPress(object sender, KeyPressEventArgs e)
