@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace ServerApp
 {
-    class Server
+    public class Server
     {
         private int _portNumber;
         private TcpListener _listener;
