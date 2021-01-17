@@ -26,7 +26,7 @@ namespace ServerApp
 
             connectedUsers = new Dictionary<Client, string>();
             tempConn = new List<Client>();
-            IPAddress ipAddres = IPAddress.Parse("192.168.112.16");
+            IPAddress ipAddres = IPAddress.Parse("192.168.0.130");
             this._listener = new TcpListener(ipAddres, _portNumber);
             this._listener.Start();
             this._listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
@@ -34,12 +34,16 @@ namespace ServerApp
             Console.WriteLine("Server is running");
             Console.WriteLine($"Listening on {ipAddres.ToString()}:{_portNumber}");
 
-            Timer timer = new Timer((e) =>
-            {
-                SaveUsers();
-                SaveChatLog();
-            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+            Thread saveThread = new Thread(new ThreadStart(saveServer));
+            saveThread.Start();
 
+        }
+
+        private void saveServer()
+        {
+            SaveUsers();
+            SaveChatLog();
+            Thread.Sleep(2000);
         }
 
         private void OnConnect(IAsyncResult result)
