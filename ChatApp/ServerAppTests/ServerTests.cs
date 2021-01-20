@@ -27,11 +27,7 @@ namespace ServerApp.Tests
 
             string response = _server.LoginClient(_client, username, password);
 
-            Console.WriteLine(response);
-
-            Assert.AreEqual(response, "ERROR");
+            Assert.AreEqual("ERROR", response);
         }
-
-        
     }
 }

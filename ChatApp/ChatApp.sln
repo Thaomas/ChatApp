@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerApp", "ServerApp\Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAppTests", "ServerAppTests\ServerAppTests.csproj", "{57368EE9-3C3A-4060-8978-3AB417092F9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientAppTests1", "ClientAppTests1\ClientAppTests1.csproj", "{4F851D7C-0A58-40B2-ACC3-EE47C013EF99}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ServerUtils\ServerUtils.projitems*{5d7ca38c-7f40-49e0-aaf9-233a9a84d02b}*SharedItemsImports = 5
@@ -40,6 +42,10 @@ Global
 		{57368EE9-3C3A-4060-8978-3AB417092F9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57368EE9-3C3A-4060-8978-3AB417092F9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57368EE9-3C3A-4060-8978-3AB417092F9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F851D7C-0A58-40B2-ACC3-EE47C013EF99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F851D7C-0A58-40B2-ACC3-EE47C013EF99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F851D7C-0A58-40B2-ACC3-EE47C013EF99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F851D7C-0A58-40B2-ACC3-EE47C013EF99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

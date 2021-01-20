@@ -26,7 +26,7 @@ namespace ServerApp
 
             connectedUsers = new Dictionary<Client, string>();
             tempConn = new List<Client>();
-            IPAddress ipAddres = IPAddress.Parse("192.168.0.130");
+            IPAddress ipAddres = IPAddress.Parse("192.168.112.2");
             this._listener = new TcpListener(ipAddres, _portNumber);
             this._listener.Start();
             this._listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
