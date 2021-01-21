@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -13,7 +13,9 @@ namespace ClientApp
         {
             InitializeComponent();
             Shown += HomeForm_Shown;
+
             this.loginForm = loginForm;
+            
             this.client = client;
             this.client.setForms(this, loginForm);
             this.client.OnChatReceived += Client_OnChatReceived;

@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using ServerUtils;
 using System;
 using System.Collections.Generic;
@@ -20,6 +20,8 @@ namespace ClientApp
         private byte[] _buffer = new byte[4];
         private bool _loggedIn = false;
         private bool _registered = false;
+        private HomeForm hf;
+        private LoginForm lf;
 
         public IPEndPoint RemoteEndPoint { get; internal set; }
 
@@ -207,6 +209,12 @@ namespace ClientApp
             {
                 System.Windows.Forms.MessageBox.Show("No server connected");
             }
+        }
+
+        public void setForms(HomeForm homeForm, LoginForm loginForm)
+        {
+            this.hf = homeForm;
+            this.lf = loginForm;
         }
 
         public void Disconnect()
