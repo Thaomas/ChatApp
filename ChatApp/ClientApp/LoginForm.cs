@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Windows.Forms;
@@ -26,7 +26,7 @@ namespace ClientApp
             {
                 if (status)
                 {
-                    HomeForm homePageForm = new HomeForm(_client, chatlog);
+                    HomeForm homePageForm = new HomeForm(_client, chatlog, this);
                     homePageForm.Show();
                     this.Hide();
                 }

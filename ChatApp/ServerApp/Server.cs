@@ -34,6 +34,7 @@ namespace ServerApp
             Console.WriteLine("Server is running");
             Console.WriteLine($"Listening on {ipAddres.ToString()}:{_portNumber}");
 
+            //Technisch gezien multi-threading
             Thread saveThread = new Thread(new ThreadStart(saveServer));
             saveThread.Start();
 
@@ -41,9 +42,13 @@ namespace ServerApp
 
         private void saveServer()
         {
-            SaveUsers();
-            SaveChatLog();
-            Thread.Sleep(2000);
+            while (true)
+            {
+                SaveUsers();
+                SaveChatLog();
+                Console.WriteLine("Save");
+                Thread.Sleep(2000);
+            }
         }
 
         private void OnConnect(IAsyncResult result)
@@ -62,13 +67,11 @@ namespace ServerApp
                 if (!users.ContainsKey(username))
                 {
                     users.Add(username, password);
-                    lock (connectedUsers) lock (tempConn)
-                        {
-                            tempConn.Remove(client);
-                            connectedUsers.Add(client, username);
-                            client.Username = username;
-                        }
-
+                    lock (connectedUsers)
+                        connectedUsers.Add(client, username);
+                    lock (tempConn)
+                        tempConn.Remove(client);
+                    client.Username = username;
                     return "OK";
                 }
                 else
@@ -78,41 +81,47 @@ namespace ServerApp
 
         public string LoginClient(Client client, string username, string password)
         {
-            lock (connectedUsers) lock (users)
+            lock (users)
+            {
+                if (users.ContainsKey(username) && users[username].Equals(password))
                 {
-                    if (users.ContainsKey(username) && users[username].Equals(password))
+                    if (!connectedUsers.ContainsValue(username) && !connectedUsers.ContainsKey(client))
                     {
-                        if (!connectedUsers.ContainsValue(username) && !connectedUsers.ContainsKey(client))
-                        {
+                        lock (connectedUsers)
                             connectedUsers.Add(client, username);
-                            lock (tempConn)
-                                tempConn.Remove(client);
-                            client.Username = username;
-                            return "OK";
-                        }
-                        else
-                        {
-                            return "ALREADYCONNECTED";
-                        }
+                        lock (tempConn)
+                            tempConn.Remove(client);
+                        client.Username = username;
+                        return "OK";
                     }
                     else
                     {
-                        return "ERROR";
+                        return "ALREADYCONNECTED";
                     }
-
                 }
+                else
+                {
+                    return "ERROR";
+                }
+
+            }
         }
 
         public void DisconnectClient(Client client)
         {
-            connectedUsers.Remove(client);
+            lock (connectedUsers)
+                connectedUsers.Remove(client);
             client.Username = "";
 
         }
 
         private void SaveChatLog()
         {
-            List<string> log = GetChatLog();
+            List<string> log;
+            lock (_chatLog)
+            {
+                log = GetChatLog();
+            }
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\ChatLog.txt");
             File.WriteAllLines(path, log);
         }
@@ -137,10 +146,10 @@ namespace ServerApp
         {
             Dictionary<string, string> listDict;
             lock (users)
-            {
                 listDict = new Dictionary<string, string>(users);
-            }
+
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DataStorage\Users.txt");
+
             List<string> userList = new List<string>();
             foreach (KeyValuePair<string, string> kvPair in listDict)
             {
@@ -181,6 +190,7 @@ namespace ServerApp
             string time = DateTime.Now.ToString();
             time += " | ";
             time += message;
+            lock(_chatLog)
             _chatLog.Add(time);
             foreach (KeyValuePair<Client, string> keyPair in connectedUsers)
             {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -8,12 +8,16 @@ namespace ClientApp
     {
 
         private Client client;
-        public HomeForm(Client client, List<string> chatLog)
+        private LoginForm loginForm;
+        public HomeForm(Client client, List<string> chatLog, LoginForm loginForm)
         {
             InitializeComponent();
             Shown += HomeForm_Shown;
+            this.loginForm = loginForm;
             this.client = client;
+            this.client.setForms(this, loginForm);
             this.client.OnChatReceived += Client_OnChatReceived;
+            this.client.OnConnectionLost += Client_OnConnectionLost;
 
             foreach (string message in chatLog)
             {
@@ -56,6 +60,15 @@ namespace ClientApp
             this.client.SendChatMessage(textBoxChatMessage.Text);
             textBoxChatMessage.Clear();
             textBoxChatMessage.Focus();
+        }
+
+        public void Client_OnConnectionLost()
+        {
+            this.Invoke((Action)delegate
+            {
+                this.Close();
+                loginForm.Show();
+            });
         }
     }
 }

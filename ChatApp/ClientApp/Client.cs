@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using ServerUtils;
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,7 @@ namespace ClientApp
     public delegate void LoginCallback(bool status, List<string> chatlog);
     public delegate void RegisterCallback(bool status);
     public delegate void ChatCallback(string message);
+    public delegate void ConnectionLostCallback();
     public class Client
     {
         private TcpClient _client;
@@ -25,6 +26,7 @@ namespace ClientApp
         public event LoginCallback OnLogin;
         public event RegisterCallback OnRegister;
         public event ChatCallback OnChatReceived;
+        public event ConnectionLostCallback OnConnectionLost;
 
         public Client()
         {
@@ -62,7 +64,14 @@ namespace ClientApp
             int dataLength = BitConverter.ToInt32(this._buffer);
 
             this._buffer = new byte[dataLength];
-            this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(ReceiveData), null);
+            try
+            {
+                this._stream.BeginRead(this._buffer, 0, this._buffer.Length, new AsyncCallback(ReceiveData), null);
+            }catch(Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show("Error with connection to the server.");
+                OnConnectionLost.Invoke();
+            }
         }
 
         private void ReceiveData(IAsyncResult ar)
